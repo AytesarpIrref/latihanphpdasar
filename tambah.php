@@ -2,6 +2,7 @@
 require 'functions.php';
 
 if (isset ($_POST["submit"])) {
+
   if (tambah($_POST) > 0) {
     echo "
       <script>
@@ -37,7 +38,7 @@ if (isset ($_POST["submit"])) {
   <body>
     <div class="container">
       <legend>Tambahkan Daftar Game</legend>
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="nama">Nama Game : </label>
           <input type="text" class="form-control" id="nama" placeholder="Masukkan nama game" name="nama" required>
@@ -55,12 +56,20 @@ if (isset ($_POST["submit"])) {
           <input type="text" class="form-control" id="rilis" placeholder="Masukkan tanggal rilis game" name="rilis" required>
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput2">Gambar : </label>
-          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Masukkan gambar game" name="img">
-        </div>
-        <div class="form-group">
           <label for="formGroupExampleInput2">Versi : </label>
           <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Masukkan versi game saat ini" name="versi">
+        </div>
+        <!-- <div class="form-group">
+          <label for="formGroupExampleInput2">Gambar : </label>
+          <input type="file" class="form-control" id="formGroupExampleInput2" placeholder="Masukkan gambar game" name="img">
+        </div> -->
+        
+        <div class="form-group">
+            <label for="customFile">Gambar : </label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="img">
+            <label class="custom-file-label" for="customFile">Pilih file gambar</label>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary" name="submit">Kirim</button>
       </form>

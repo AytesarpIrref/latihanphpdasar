@@ -44,8 +44,9 @@ if (isset ($_POST["submit"])) {
   <body>
     <div class="container">
       <legend>Ubah Informasi Game</legend>
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= $game["id"]; ?>">
+        <input type="hidden" name="gambarLama" value="<?= $game["img"]; ?>">
         <div class="form-group">
           <label for="nama">Nama Game : </label>
           <input type="text" class="form-control" id="nama" name="nama" value="<?= $game["nama"]; ?>" required>
@@ -66,9 +67,13 @@ if (isset ($_POST["submit"])) {
           <label for="formGroupExampleInput2">Versi : </label>
           <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Masukkan versi game saat ini" value="<?= $game["versi"]; ?>" name="versi">
         </div>
-        <div class="form-group">
-          <label for="formGroupExampleInput2">Gambar : </label>
-          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Masukkan gambar game" name="img" value="<?= $game["img"]; ?>">
+        <label style="display: block;">Gambar : </label>
+        <img src="img/<?= $game["img"]; ?>" alt="..." />
+        <div class="form-group mt-2">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="img">
+            <label class="custom-file-label" for="customFile">Ganti gambar</label>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary" name="submit">Kirim</button>
       </form>

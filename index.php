@@ -6,7 +6,7 @@ $games = query("SELECT * FROM game");
 // if (isset ($_POST["cari"]))  {
 //   $games= cari($_POST["keyword"]);
 // }
-// ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +72,7 @@ $games = query("SELECT * FROM game");
             name="keyword"
             class="form-control mr-sm-2"
             type="text"
-            placeholder="Cari dari daftar"
+            placeholder="Error"
             aria-label="Search"
           />
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit" name="cari">
