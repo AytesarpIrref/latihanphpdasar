@@ -1,4 +1,10 @@
 <?php  
+session_start();
+
+if (!isset($_SESSION["login"])) {
+  header("Location: login.php");
+  exit;
+}
 require 'functions.php';
 $games = query("SELECT * FROM game");
 
@@ -82,7 +88,12 @@ $games = query("SELECT * FROM game");
       </div>
     </nav>
 
-    <div class="d-flex justify-content-center mt-5 mb-5">
+    <div class="d-flex justify-content-end">
+      <a class="btn btn-danger m-2" href="logout.php" role="button">LogOut</a>
+    </div>
+    
+
+    <div class="d-flex justify-content-center mb-5">
       <a class="btn btn-outline-primary" href="tambah.php" role="button"
         >Tambah Daftar (+)</a
       >

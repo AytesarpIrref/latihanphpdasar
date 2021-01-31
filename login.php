@@ -1,6 +1,26 @@
 <?php 
-
+session_start();
 require 'functions.php';
+
+if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
+  $id = $_COOKIE['id'];
+  $key= $_COOKIE['key'];
+
+  // ambil berdasarkan id
+  $result = mysqli_query($conn, "SELECT username FROM user WHERE id = $id");
+  $row = mysqli_fetch_assoc($result);
+
+  // cek cookie & username
+  if ($key === hash('sha256', $row['username'])) {
+    $_SESSION['login'] = true;
+  }
+}
+
+if (isset($_SESSION["login"])) {
+  header("Location: index.php");
+  exit;
+}
+
 
 if (isset ($_POST["login"])){
 
@@ -15,6 +35,16 @@ if (isset ($_POST["login"])){
     // cek password
     $row = mysqli_fetch_assoc($result);
     if (password_verify($password, $row["password"])) {
+
+      // cek session
+      $_SESSION["login"] = true;
+
+      // cek remember me
+      if (isset($_POST['remember'])) {
+        setcookie('id', $row['id'], time() + 360);
+        setcookie('key', hash('sha256', $row['username']), time() + 360);
+      }
+
       header("Location: index.php");
       exit;
     }
@@ -73,6 +103,9 @@ if (isset ($_POST["login"])){
       label {
         font-weight: 500;
       }
+      .form-check-label{
+        font-weight: 400;
+      }
       .error{
         color: red;
       }
@@ -110,7 +143,12 @@ if (isset ($_POST["login"])){
             autocomplete="off"
             required
           />
-
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="remember" name="remember">
+          <label class="form-check-label" for="remember">
+            Remember me
+          </label>
         </div>
           
         <button
