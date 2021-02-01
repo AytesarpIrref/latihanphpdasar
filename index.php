@@ -6,12 +6,21 @@ if (!isset($_SESSION["login"])) {
   exit;
 }
 require 'functions.php';
-$games = query("SELECT * FROM game");
+
+// pagination
+$jumlahDataPerHalaman = 4;
+$jumlahData = count(query("SELECT * FROM game"));
+$jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+$halamanAktif = (isset($_GET["page"])) ? $_GET['page']:1;
+$dataAwal = ($jumlahDataPerHalaman * $halamanAktif) - $jumlahDataPerHalaman;
+
+
+$games = query("SELECT * FROM game LIMIT $dataAwal, $jumlahDataPerHalaman");
 
 // cari dari daftar(failed)
-// if (isset ($_POST["cari"]))  {
-//   $games= cari($_POST["keyword"]);
-// }
+if (isset ($_POST["cari"]))  {
+  $games= cari($_POST["keyword"]);
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +44,7 @@ $games = query("SELECT * FROM game");
     <!-- My Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?$jumlahDatafamily=Roboto:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -54,6 +63,7 @@ $games = query("SELECT * FROM game");
     <title>Latihan PHP</title>
   </head>
   <body>
+
     <!-- Navbar -->
     <nav
       class="navbar navbar-expand-lg navbar-dark bg-primary font-weight-bold px-5"
@@ -76,12 +86,13 @@ $games = query("SELECT * FROM game");
         <form class="form-inline my-2 my-lg-0" method="POST">
           <input
             name="keyword"
-            class="form-control mr-sm-2"
+            class="form-control mr-sm-2 keyword"
             type="text"
             placeholder="Error"
             aria-label="Search"
+            autocomplete="off"
           />
-          <button class="btn btn-outline-light my-2 my-sm-0" type="submit" name="cari">
+          <button class="btn btn-outline-light my-2 my-sm-0 cari" type="submit" name="cari">
             Cari
           </button>
         </form>
@@ -102,6 +113,11 @@ $games = query("SELECT * FROM game");
     <!-- Card -->
     <div class="container-fluid">
       <div class="row justify-content-center">
+        <?php if (empty($games)) : ?>
+          <div class="alert alert-danger" role="alert">
+            Data game tidak ditemukan...!
+          </div>
+        <?php endif; ?>
         <?php foreach($games as $game) : ?>
           <div class="col-xl-3 col-lg-4 col-md-6 col-12 justify-content-center">
             <div class="container">
@@ -143,7 +159,51 @@ $games = query("SELECT * FROM game");
           </div>
         <?php endforeach; ?>
       </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <?php if($halamanAktif > 1) : ?>
+            <li class="page-item">
+              <a class="page-link" href="?page=<?= $halamanAktif - 1; ?>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li> 
+          <?php else : ?>
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li> 
+          <?php endif; ?>
+          
+          <?php for($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+            <?php if($i == $halamanAktif) : ?>
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page=<?=$i; ?>"><?= $i; ?></a>
+              </li>
+            <?php else : ?>
+              <li class="page-item">
+                <a class="page-link" href="?page=<?=$i; ?>"><?= $i; ?></a>
+              </li>
+            <?php endif; ?>
+          <?php endfor; ?>
+          <?php if($halamanAktif < $jumlahHalaman) : ?>
+            <li class="page-item">
+              <a class="page-link" href="?page=<?= $halamanAktif + 1; ?>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li> 
+          <?php else : ?>
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li> 
+          <?php endif; ?>
+        </ul>
+      </nav>
     </div>
+
+    <script src="js/script.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

@@ -111,19 +111,18 @@ function ubah($data){
   return mysqli_affected_rows($conn);
 }
 
-// (Failed)
 
-// function cari($keyword){
-//   $query = "SELECT * FROM games 
-//               WHERE 
-//               nama LIKE '%$keyword%' OR
-//               genre LIKE '%$keyword%' OR 
-//               dev LIKE '%$keyword%' OR
-//               rilis LIKE '%$keyword%' OR
-//               versi LIKE '%$keyword%'
-//             ";
-//   return query($query);
-// }
+function cari($keyword){
+  $query = "SELECT * FROM game
+              WHERE 
+              nama LIKE '%$keyword%' OR
+              genre LIKE '%$keyword%' OR 
+              dev LIKE '%$keyword%' OR
+              rilis LIKE '%$keyword%' OR
+              versi LIKE '%$keyword%'
+            ";
+  return query($query);
+}
 
 function registrasi ($data){
   global $conn;
